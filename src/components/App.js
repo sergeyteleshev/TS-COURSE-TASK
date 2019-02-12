@@ -6,9 +6,7 @@ import MainContainer from "../containers/MainContainer";
 export default class App extends React.Component {
     render() {
         return  (
-            <Switch>
-                <Route exact path="/" component={MainContainer} />
-            </Switch>
+            <MainContainer/>
         );
     }
 }

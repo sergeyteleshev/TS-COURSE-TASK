@@ -25,11 +25,11 @@ export default class SettingsComponent extends React.Component
                 </thead>
                 <tbody>
                 <tr>
-                    <td><input onChange={(event) => this.props.handleChange('MAX_PRIORITY', event)} value={this.props.MAX_PRIORITY} type={"text"}/></td>
-                    <td><input onChange={(event) => this.props.handleChange('AV_TIME_CLAIMS_RECEIPT', event)} value={this.props.AV_TIME_CLAIMS_RECEIPT} type={"text"}/></td>
-                    <td><input onChange={(event) => this.props.handleChange('AV_TIME_CLAIMS_PROCESSING', event)} value={this.props.AV_TIME_CLAIMS_PROCESSING} type={"text"}/></td>
-                    <td><input onChange={(event) => this.props.handleChange('DEVICE_AMOUNT', event)} value={this.props.DEVICE_AMOUNT} type={"text"}/></td>
-                    <td><input onChange={(event) => this.props.handleChange('STORAGE_CAPACITY', event)} value={this.props.STORAGE_CAPACITY} type={"text"}/></td>
+                    <td><input onChange={(event) => this.props.handleChange('MAX_PRIORITY', event)} value={this.props.MAX_PRIORITY} type={"number"}/></td>
+                    <td><input onChange={(event) => this.props.handleChange('AV_TIME_CLAIMS_RECEIPT', event)} value={this.props.AV_TIME_CLAIMS_RECEIPT} type={"number"}/></td>
+                    <td><input onChange={(event) => this.props.handleChange('AV_TIME_CLAIMS_PROCESSING', event)} value={this.props.AV_TIME_CLAIMS_PROCESSING} type={"number"}/></td>
+                    <td><input onChange={(event) => this.props.handleChange('DEVICE_AMOUNT', event)} value={this.props.DEVICE_AMOUNT} type={"number"}/></td>
+                    <td><input onChange={(event) => this.props.handleChange('STORAGE_CAPACITY', event)} value={this.props.STORAGE_CAPACITY} type={"number"}/></td>
                 </tr>
                 </tbody>
             </Table>

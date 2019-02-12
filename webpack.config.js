@@ -1,6 +1,7 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const webpack = require('webpack');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const NODE_ENV = process.env.NODE_ENV;
@@ -48,7 +49,7 @@ const config = {
 if (NODE_ENV === 'production') {
     config.output = {
         filename: 'bundle.[hash].js',
-            path: path.resolve(__dirname, './build/')
+        path: path.resolve(__dirname, './build/')
     };
     config.plugins.push(
         new webpack.optimize.ModuleConcatenationPlugin()
@@ -60,19 +61,7 @@ if (NODE_ENV === 'production') {
         })
     );
     config.plugins.push(
-        new webpack.optimize.UglifyJsPlugin({
-            beautify: false,
-            comments: false,
-            compress: {
-                sequences     : true,
-                booleans      : true,
-                loops         : true,
-                unused      : true,
-                warnings    : false,
-                drop_console: true,
-                unsafe      : true
-            }
-        })
+        new UglifyJsPlugin({ sourceMap: true })
     );
     config.plugins.push(
         new webpack.NoEmitOnErrorsPlugin()
@@ -90,10 +79,10 @@ if (NODE_ENV === 'production') {
         new HtmlWebpackPlugin({
             title: 'SEO',
             template:'./src/template.html',
-            filename:'Background.html',
+            filename:'index.html',
             inject:false,
             source:'',
-            prefix:'{$wa_app_static_url}js/build/'
+            prefix:'./'
         })
     );
     config.module.rules.push(

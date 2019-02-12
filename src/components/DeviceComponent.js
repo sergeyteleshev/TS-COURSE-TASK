@@ -37,7 +37,7 @@ export default class DeviceComponent extends React.Component
                 </thead>
                 <tbody>
                     <tr>
-                        <th>Приоритет</th>
+                        <th>Очередь в клуб</th>
                         {tds}
                     </tr>
                 </tbody>
