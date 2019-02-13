@@ -1,47 +1,34 @@
 import React from 'react';
-import Table from "react-bootstrap/Table";
+import PropTypes from 'prop-types';
 
 export default class DeviceComponent extends React.Component
 {
     render()
     {
-        const styles= {
-            textAlign: 'center',
-            width: '1100',
+        const style = {
+            roundBusy: {
+                width: 100,
+                height: 100,
+                borderRadius: 50,
+                backgroundColor: 'red',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+            },
+            titleBusy: {
+                color: 'white',
+            }
         };
 
-        let tds = [];
-        let tdsIndex = [];
-        const amountOfNumbers = Math.floor(Math.random() * this.props.STORAGE_CAPACITY + 1);
-
-        for(let i = 0; i < this.props.STORAGE_CAPACITY; i++)
-        {
-            tdsIndex.push(<td>{i+1}</td>);
-            if(i < amountOfNumbers)
-            {
-                tds.push(<td>-</td>);
-            }
-            else
-            {
-                tds.push(<td>{Math.floor(Math.random() * this.props.MAX_PRIORITY) + 1}</td>);
-            }
-        }
-
         return (
-            <Table size={"lg"} striped={true} style={styles} responsive={"md"} striped bordered hover>
-                <thead>
-                    <tr>
-                        <th>Индекс</th>
-                        {tdsIndex}
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>Очередь в клуб</th>
-                        {tds}
-                    </tr>
-                </tbody>
-            </Table>
+            <div style={style.roundBusy}>
+                <p style={style.titleBusy}>{this.props.title ? this.props.title : "Охранник 1"}</p>
+            </div>
         );
     }
 }
+
+DeviceComponent.propTypes = {
+    title: PropTypes.string,
+    isBusy: PropTypes.bool,
+};
