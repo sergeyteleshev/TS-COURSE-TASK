@@ -19,15 +19,15 @@ export default class ApplicationFlowComponent extends React.Component
 
         for(let i = 0; i < this.props.STORAGE_CAPACITY; i++)
         {
-            tdsIndex.push(<td>{i+1}</td>);
+            tdsIndex.push(<td key={"index-" + i}>{i+1}</td>);
             if(i < amountOfNumbers)
             {
-                tds.push(<td>-</td>);
+                tds.push(<td key={"value-" + i}>-</td>);
             }
             else
             {
                 //tds.push(<td>{Math.floor(Math.random() * this.props.MAX_PRIORITY) + 1}</td>);
-                tds.push(<td>{randomNumbers[i].toFixed(2)}</td>);
+                tds.push(<td key={"value-" + i}>{randomNumbers[i].toFixed(2)}</td>);
             }
         }
 

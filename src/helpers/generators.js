@@ -12,8 +12,6 @@ export const average = (X) => {
 
     u = sum / X.length;
 
-    console.log('u', u);
-
     return u;
 };
 
@@ -30,19 +28,26 @@ export const dispersion = (X) =>
     return sum / (X.length - 1);
 };
 
-export const covariance = (X, Y) => {
+export const correlation = (X, Y) => {
     let u = average(X);
+    let sum = 0;
+    let k = [];
+    let p = [];
+    let disp = dispersion(X);
 
-    let sum = [];
-
-    for(let i = 0; i < X.length; i++)
+    for(let j = 0; j < Y.length; j++)
     {
-        for(let j = 0; j < Y.length; j++)
+        sum = 0;
+        for(let i = 0; i < X.length - j; i++)
         {
-            sum[j] += ((X[i] - u) * (X[i+j] - u)) / (X.length - j);
+            sum += ((X[i] - u) * (X[i+j] - u));
         }
+
+        k[j] = sum / (X.length - 1 - j);
+        p[j] = k[j] / disp;
     }
 
+    return p;
 };
 
 export const generateRandomNumbers = (n) => {
@@ -50,6 +55,7 @@ export const generateRandomNumbers = (n) => {
     let Y = [];
     let X = [];
     let u = 0;
+    let set = {};
 
     for(let i = 1; i < n; i++)
     {
@@ -67,6 +73,8 @@ export const generateRandomNumbers = (n) => {
     {
         X.push(-(u * Math.log10(Y[i])));
     }
+
+    set = {...set, E,Y,X};
 
     return X;
 };
