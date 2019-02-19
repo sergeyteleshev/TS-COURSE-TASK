@@ -7,12 +7,11 @@ import XAxis from "recharts/es6/cartesian/XAxis";
 import CartesianGrid from "recharts/es6/cartesian/CartesianGrid";
 import Line from "recharts/es6/cartesian/Line";
 import YAxis from "recharts/es6/cartesian/YAxis";
-import {average, correlation, generateRandomNumbers} from "../helpers/generators";
+import {average, correlation, dispersion, generateRandomNumbers} from "../helpers/generators";
 import ScatterChart from "recharts/es6/chart/ScatterChart";
 import Scatter from "recharts/es6/cartesian/Scatter";
 import Tooltip from "react-bootstrap/Tooltip";
 import BarChart from "recharts/es6/chart/BarChart";
-import Legend from "recharts/es6/component/Legend";
 import Bar from "recharts/es6/cartesian/Bar";
 
 export default class MainComponent extends React.Component
@@ -47,29 +46,55 @@ export default class MainComponent extends React.Component
                 verticalAlign: 'center',
                 width: '100%',
                 flexWrap: 'wrap',
+            },
+            comparison: {
+                display: 'inline-flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+            },
+            comparisonItem: {
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
             }
         };
 
-        let data = [];
-        let dataCorrelation = [];
+        let dataTimeClaimsReceipt = [];
+        let dataCorrelationTimeClaimsReceipt = [];
+        let dataTimeClaimsProcessing = [];
+        let dataCorrelationTimeClaimsProcessing = [];
+        let arr = new Array(20);
 
-        let numbers = generateRandomNumbers(50);
-        let correlationNumbers = correlation(numbers, numbers);
-        console.log('average:', average(numbers));
+        let numbersTimeClaimsReceipt = generateRandomNumbers(this.props.N, this.props.AV_TIME_CLAIMS_RECEIPT);
+        let numbersTimeClaimsProcessing = generateRandomNumbers(this.props.N, this.props.AV_TIME_CLAIMS_PROCESSING);
 
-        for(let i = 1; i < numbers.length; i++)
+        let correlationNumbersTimeClaimsReceipt = correlation(numbersTimeClaimsReceipt, arr);
+        let correlationNumbersTimeClaimsProcessing = correlation(numbersTimeClaimsProcessing, arr);
+
+        for(let i = 1; i < numbersTimeClaimsReceipt.length; i++)
         {
-            data.push({
-                x: numbers[i],
-                y: numbers[i - 1],
+            dataTimeClaimsReceipt.push({
+                x: numbersTimeClaimsReceipt[i],
+                y: numbersTimeClaimsReceipt[i - 1],
+            });
+
+            dataTimeClaimsProcessing.push({
+                x: numbersTimeClaimsProcessing[i],
+                y: numbersTimeClaimsProcessing[i - 1],
             });
         }
 
-        for(let i = 1; i < correlationNumbers.length; i++)
+        for(let i = 1; i < correlationNumbersTimeClaimsReceipt.length; i++)
         {
-            dataCorrelation.push({
-                x: numbers[i],
-                y: numbers[i - 1],
+            dataCorrelationTimeClaimsReceipt.push({
+                x: numbersTimeClaimsReceipt[i],
+                y: numbersTimeClaimsReceipt[i - 1],
+            });
+
+            dataCorrelationTimeClaimsProcessing.push({
+                x: numbersTimeClaimsProcessing[i],
+                y: numbersTimeClaimsProcessing[i - 1],
             });
         }
 
@@ -93,47 +118,96 @@ export default class MainComponent extends React.Component
                         )
                     }
                 </div>
-                <div>
-                    <ScatterChart
-                        width={500}
-                        height={500}
-                        margin={{
-                            top: 20, right: 20, bottom: 20, left: 20,
-                        }}
-                    >
-                        <CartesianGrid />
-                        <XAxis type="number" dataKey="x" name="stature" />
-                        <YAxis type="number" dataKey="y" name="weight" />
-                        <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                        <Scatter name="A school" data={data} fill="#8884d8" />
-                    </ScatterChart>
-                </div>
 
-                <div>
-                    <LineChart width={500} height={300} data={dataCorrelation}>
-                        <XAxis dataKey="x"/>
-                        <YAxis/>
-                        <CartesianGrid stroke="#eee" strokeDasharray="3 3"/>
-                        <Line type="monotone" dataKey="y" stroke="#8884d8" />
-                    </LineChart>
-                </div>
-
-                <div>
-                    <BarChart
-                        width={500}
-                        height={300}
-                        data={data}
-                        margin={{
-                            top: 5, right: 30, left: 20, bottom: 5,
-                        }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="x" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey="y" fill="#8884d8" />
-                    </BarChart>
+                <div style={style.comparison}>
+                    <div>
+                        <div style={style.comparisonItem}>
+                            <p>Мат Ожидание: {average(numbersTimeClaimsReceipt)}</p>
+                            <p>Дисперсия: {dispersion(numbersTimeClaimsReceipt)}</p>
+                        </div>
+                        <div style={style.comparisonItem}>
+                            <ScatterChart
+                                width={500}
+                                height={500}
+                                margin={{
+                                    top: 20, right: 20, bottom: 20, left: 20,
+                                }}
+                            >
+                                <CartesianGrid />
+                                <XAxis type="number" dataKey="x" name="stature" />
+                                <YAxis type="number" dataKey="y" name="weight" />
+                                <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                                <Scatter name="A school" data={dataTimeClaimsReceipt} fill="#8884d8" />
+                            </ScatterChart>
+                        </div>
+                        <div style={style.comparisonItem}>
+                            <LineChart width={500} height={300} data={dataCorrelationTimeClaimsReceipt}>
+                                <XAxis dataKey="x"/>
+                                <YAxis/>
+                                <CartesianGrid stroke="#eee" strokeDasharray="3 3"/>
+                                <Line type="monotone" dataKey="y" stroke="#8884d8" />
+                            </LineChart>
+                        </div>
+                        <div style={style.comparisonItem}>
+                            <BarChart
+                                width={500}
+                                height={300}
+                                data={dataCorrelationTimeClaimsReceipt}
+                                margin={{
+                                    top: 5, right: 30, left: 20, bottom: 5,
+                                }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="x" />
+                                <YAxis />
+                                <Bar dataKey="y" fill="#8884d8" />
+                            </BarChart>
+                        </div>
+                    </div>
+                    <div>
+                        <div style={style.comparisonItem}>
+                            <p>Мат Ожидание: {average(numbersTimeClaimsProcessing)}</p>
+                            <p>Дисперсия: {dispersion(numbersTimeClaimsProcessing)}</p>
+                        </div>
+                        <div style={style.comparisonItem}>
+                            <ScatterChart
+                                width={500}
+                                height={500}
+                                margin={{
+                                    top: 20, right: 20, bottom: 20, left: 20,
+                                }}
+                            >
+                                <CartesianGrid />
+                                <XAxis type="number" dataKey="x" name="stature" />
+                                <YAxis type="number" dataKey="y" name="weight" />
+                                <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                                <Scatter name="A school" data={dataTimeClaimsProcessing} fill="#8884d8" />
+                            </ScatterChart>
+                        </div>
+                        <div style={style.comparisonItem}>
+                            <LineChart width={500} height={300} data={dataCorrelationTimeClaimsProcessing}>
+                                <XAxis dataKey="x"/>
+                                <YAxis/>
+                                <CartesianGrid stroke="#eee" strokeDasharray="3 3"/>
+                                <Line type="monotone" dataKey="y" stroke="#8884d8" />
+                            </LineChart>
+                        </div>
+                        <div style={style.comparisonItem}>
+                            <BarChart
+                                width={500}
+                                height={300}
+                                data={dataCorrelationTimeClaimsProcessing}
+                                margin={{
+                                    top: 5, right: 30, left: 20, bottom: 5,
+                                }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="x" />
+                                <YAxis />
+                                <Bar dataKey="y" fill="#8884d8" />
+                            </BarChart>
+                        </div>
+                    </div>
                 </div>
             </div>
         );

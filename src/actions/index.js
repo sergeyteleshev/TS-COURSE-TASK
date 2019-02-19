@@ -12,9 +12,8 @@ export function settingsHandleChange(propertyName, event)
     let settingsData = [];
 
     settingsData[propertyName] = event.target.value;
-    if(settingsData[propertyName].length <= 2)
-        return {
-            type: SETTINGS_HANDLE_CHANGE,
-            payload: settingsData,
-        }
+    return {
+        type: SETTINGS_HANDLE_CHANGE,
+        payload: settingsData,
+    }
 }

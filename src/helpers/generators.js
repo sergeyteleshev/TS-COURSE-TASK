@@ -50,11 +50,10 @@ export const correlation = (X, Y) => {
     return p;
 };
 
-export const generateRandomNumbers = (n) => {
+export const generateRandomNumbers = (n, u) => {
     let E = [1];
     let Y = [];
     let X = [];
-    let u = 0;
     let set = {};
 
     for(let i = 1; i < n; i++)
@@ -67,11 +66,9 @@ export const generateRandomNumbers = (n) => {
         Y.push(E[i] / m);
     }
 
-    u = average(Y);
-
     for(let i = 0; i < n; i++)
     {
-        X.push(-(u * Math.log10(Y[i])));
+        X.push(-(u * Math.log(Y[i])));
     }
 
     set = {...set, E,Y,X};

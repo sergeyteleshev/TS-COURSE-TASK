@@ -3,7 +3,7 @@ import {
     AV_TIME_CLAIMS_PROCESSING,
     AV_TIME_CLAIMS_RECEIPT,
     DEVICE_AMOUNT,
-    MAX_PRIORITY,
+    MAX_PRIORITY, N,
     STORAGE_CAPACITY
 } from "../consts/initialConsts";
 import {SETTINGS_HANDLE_CHANGE} from "../actions";
@@ -16,6 +16,7 @@ const mainInitialState = {
     STORAGE_CAPACITY,
     AV_TIME_CLAIMS_RECEIPT,
     AV_TIME_CLAIMS_PROCESSING,
+    N,
 };
 
 function Main(state = {...mainInitialState}, action) {

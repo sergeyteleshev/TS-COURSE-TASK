@@ -9,6 +9,7 @@ const mapStateToProps = (state) => {
         STORAGE_CAPACITY: state.Main.STORAGE_CAPACITY,
         AV_TIME_CLAIMS_RECEIPT: state.Main.AV_TIME_CLAIMS_RECEIPT,
         AV_TIME_CLAIMS_PROCESSING: state.Main.AV_TIME_CLAIMS_PROCESSING,
+        N: state.Main.N,
     }
 };
 

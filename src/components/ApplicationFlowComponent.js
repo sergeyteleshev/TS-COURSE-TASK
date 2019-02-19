@@ -13,7 +13,8 @@ export default class ApplicationFlowComponent extends React.Component
 
         let tds = [];
         let tdsIndex = [];
-        const amountOfNumbers = Math.floor(Math.random() * this.props.STORAGE_CAPACITY + 1);
+        // const amountOfNumbers = Math.floor(Math.random() * this.props.STORAGE_CAPACITY + 1);
+        const amountOfNumbers = 0;
         const randomNumbers = generateRandomNumbers(this.props.STORAGE_CAPACITY);
         console.log(randomNumbers);
 

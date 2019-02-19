@@ -21,6 +21,7 @@ export default class SettingsComponent extends React.Component
                     <td><label>Время обработки:</label></td>
                     <td><label>Количество устройств:</label></td>
                     <td><label>Ёмкость батареи:</label></td>
+                    <td><label>N</label></td>
                 </tr>
                 </thead>
                 <tbody>
@@ -30,6 +31,7 @@ export default class SettingsComponent extends React.Component
                     <td><input onChange={(event) => this.props.handleChange('AV_TIME_CLAIMS_PROCESSING', event)} value={this.props.AV_TIME_CLAIMS_PROCESSING} type={"number"}/></td>
                     <td><input onChange={(event) => this.props.handleChange('DEVICE_AMOUNT', event)} value={this.props.DEVICE_AMOUNT} type={"number"}/></td>
                     <td><input onChange={(event) => this.props.handleChange('STORAGE_CAPACITY', event)} value={this.props.STORAGE_CAPACITY} type={"number"}/></td>
+                    <td><input onChange={(event) => this.props.handleChange('N', event)} value={this.props.N} type={"number"}/></td>
                 </tr>
                 </tbody>
             </Table>
