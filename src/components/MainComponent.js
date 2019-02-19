@@ -7,7 +7,15 @@ import XAxis from "recharts/es6/cartesian/XAxis";
 import CartesianGrid from "recharts/es6/cartesian/CartesianGrid";
 import Line from "recharts/es6/cartesian/Line";
 import YAxis from "recharts/es6/cartesian/YAxis";
-import {average, correlation, dispersion, generateRandomNumbers} from "../helpers/generators";
+import {
+    average,
+    correlation,
+    criteriaStatistics,
+    dispersion,
+    generateRandomNumbers,
+    trustInterval,
+    t
+} from "../helpers/generators";
 import ScatterChart from "recharts/es6/chart/ScatterChart";
 import Scatter from "recharts/es6/cartesian/Scatter";
 import Tooltip from "react-bootstrap/Tooltip";
@@ -72,6 +80,9 @@ export default class MainComponent extends React.Component
         let correlationNumbersTimeClaimsReceipt = correlation(numbersTimeClaimsReceipt, arr);
         let correlationNumbersTimeClaimsProcessing = correlation(numbersTimeClaimsProcessing, arr);
 
+        let trustIntervalTimeClaimsReceipt = trustInterval(numbersTimeClaimsReceipt);
+        let trustIntervalTimeClaimsProcessing = trustInterval(numbersTimeClaimsProcessing);
+
         for(let i = 1; i < numbersTimeClaimsReceipt.length; i++)
         {
             dataTimeClaimsReceipt.push({
@@ -124,6 +135,10 @@ export default class MainComponent extends React.Component
                         <div style={style.comparisonItem}>
                             <p>Мат Ожидание: {average(numbersTimeClaimsReceipt)}</p>
                             <p>Дисперсия: {dispersion(numbersTimeClaimsReceipt)}</p>
+                            <p>Доверительный интервал:</p>
+                            <p>[{trustIntervalTimeClaimsReceipt[0]}; {trustIntervalTimeClaimsReceipt[1]}]</p>
+                            <p>Критерий статистики: {criteriaStatistics(numbersTimeClaimsReceipt)}</p>
+                            <p>{criteriaStatistics(numbersTimeClaimsReceipt) >= t ? "Гипотеза принимается" : "Гипотеза не принимается"}</p>
                         </div>
                         <div style={style.comparisonItem}>
                             <ScatterChart
@@ -168,6 +183,11 @@ export default class MainComponent extends React.Component
                         <div style={style.comparisonItem}>
                             <p>Мат Ожидание: {average(numbersTimeClaimsProcessing)}</p>
                             <p>Дисперсия: {dispersion(numbersTimeClaimsProcessing)}</p>
+                            <p>Доверительный интервал:</p>
+                            <p>[{trustIntervalTimeClaimsProcessing[0]}; {trustIntervalTimeClaimsProcessing[1]}]</p>
+                            <p>Критерий статистики: {criteriaStatistics(numbersTimeClaimsProcessing)}</p>
+                            <p>{criteriaStatistics(numbersTimeClaimsProcessing) >= t ? "Гипотеза принимается" : "Гипотеза не принимается"}</p>
+
                         </div>
                         <div style={style.comparisonItem}>
                             <ScatterChart
@@ -181,7 +201,7 @@ export default class MainComponent extends React.Component
                                 <XAxis type="number" dataKey="x" name="stature" />
                                 <YAxis type="number" dataKey="y" name="weight" />
                                 <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                                <Scatter name="A school" data={dataTimeClaimsProcessing} fill="#8884d8" />
+                                <Scatter name="A school" data={dataTimeClaimsProcessing} fill="#880fff" />
                             </ScatterChart>
                         </div>
                         <div style={style.comparisonItem}>
@@ -189,7 +209,7 @@ export default class MainComponent extends React.Component
                                 <XAxis dataKey="x"/>
                                 <YAxis/>
                                 <CartesianGrid stroke="#eee" strokeDasharray="3 3"/>
-                                <Line type="monotone" dataKey="y" stroke="#8884d8" />
+                                <Line type="monotone" dataKey="y" stroke="#880fff" />
                             </LineChart>
                         </div>
                         <div style={style.comparisonItem}>
@@ -204,7 +224,7 @@ export default class MainComponent extends React.Component
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="x" />
                                 <YAxis />
-                                <Bar dataKey="y" fill="#8884d8" />
+                                <Bar dataKey="y" fill="#880fff" />
                             </BarChart>
                         </div>
                     </div>

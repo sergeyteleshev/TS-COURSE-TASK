@@ -1,5 +1,7 @@
-const m = 2147483647;
-const a =  630360016;
+export const m = 2147483647;
+export const a =  630360016;
+export const t = 1.96;
+export const u0 = 0.25;
 
 export const average = (X) => {
     let sum = 0;
@@ -74,4 +76,25 @@ export const generateRandomNumbers = (n, u) => {
     set = {...set, E,Y,X};
 
     return X;
+};
+
+export const trustInterval = (X) =>
+{
+    const u = average(X);
+    const o = dispersion(X);
+    const leftInterval = u - t * (Math.sqrt(o) / Math.sqrt(X.length));
+    const rightInterval = u + t * (Math.sqrt(o) / Math.sqrt(X.length));
+
+    return [leftInterval, rightInterval];
+};
+
+export const criteriaStatistics = (X) =>
+{
+    return Math.abs(Math.sqrt(X.length * ((average(X) - u0) / dispersion(X))));
+};
+
+export const histogramCheck = X =>
+{
+    const k = 1.72 * X ** (1/3);
+
 };
