@@ -53,7 +53,8 @@ export const correlation = (X, Y) => {
 };
 
 export const generateRandomNumbers = (n, u) => {
-    let E = [1];
+    const E0 = 1;
+    let E = [E0];
     let Y = [];
     let X = [];
     let set = {};
@@ -93,8 +94,59 @@ export const criteriaStatistics = (X) =>
     return Math.abs(Math.sqrt(X.length * ((average(X) - u0) / dispersion(X))));
 };
 
-export const histogramCheck = X =>
+export const histogramCheck = (X) =>
 {
-    const k = 1.72 * X ** (1/3);
+    console.log(X);
+    const k = Math.ceil(1.72 * X.length ** (1/3));
+    const dx = Math.ceil(X.length / k);
+    const trustInt = trustInterval(X);
+    let d_numbers = [];
+    let intervals = [];
 
+    for(let i = 1; i <= k; i++)
+    {
+        let el = 0;
+        let er = 0;
+
+        for(let j = 1; j <= i; j++)
+        {
+            er += X[j];
+
+            if(j !== 1)
+            {
+                el += X[j - 1]
+            }
+        }
+
+        intervals.push([el, er]);
+    }
+
+
+    for(let i = 0; i < X.length; i++)
+    {
+        for(let j = 0; j < k; j++)
+        {
+            if(X[i] >= intervals[j][0] && X[i] < intervals[j][1])
+            {
+                d_numbers.push(X[j]);
+            }
+        }
+    }
+
+    let freq = Array(d_numbers.length).fill(0);
+
+    for(let i = 0; i < d_numbers.length; i++)
+    {
+        for(let j = 0; j < X.length; j++)
+        {
+            if (d_numbers[i] === X[j])
+            {
+                freq[j]++;
+            }
+        }
+    }
+
+    console.log('freq', freq);
+
+    return freq;
 };

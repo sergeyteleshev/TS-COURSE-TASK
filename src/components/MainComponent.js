@@ -14,7 +14,7 @@ import {
     dispersion,
     generateRandomNumbers,
     trustInterval,
-    t
+    t, histogramCheck
 } from "../helpers/generators";
 import ScatterChart from "recharts/es6/chart/ScatterChart";
 import Scatter from "recharts/es6/cartesian/Scatter";
@@ -26,6 +26,8 @@ export default class MainComponent extends React.Component
 {
     render()
     {
+        const correlationNumber = 20;
+
         let devices = [];
         for(let i = 1; i <= this.props.DEVICE_AMOUNT; i++)
         {
@@ -72,10 +74,14 @@ export default class MainComponent extends React.Component
         let dataCorrelationTimeClaimsReceipt = [];
         let dataTimeClaimsProcessing = [];
         let dataCorrelationTimeClaimsProcessing = [];
+        let dataHistogramTimeClaimsReceipt = [];
+        let dataHistogramTimeClaimsProcessing = [];
         let arr = new Array(20);
 
         let numbersTimeClaimsReceipt = generateRandomNumbers(this.props.N, this.props.AV_TIME_CLAIMS_RECEIPT);
         let numbersTimeClaimsProcessing = generateRandomNumbers(this.props.N, this.props.AV_TIME_CLAIMS_PROCESSING);
+        let histogramTimeClaimsNumbers = histogramCheck(numbersTimeClaimsReceipt);
+        let histogramTimeClaimsProcessingNumbers = histogramCheck(numbersTimeClaimsProcessing);
 
         let correlationNumbersTimeClaimsReceipt = correlation(numbersTimeClaimsReceipt, arr);
         let correlationNumbersTimeClaimsProcessing = correlation(numbersTimeClaimsProcessing, arr);
@@ -96,16 +102,29 @@ export default class MainComponent extends React.Component
             });
         }
 
-        for(let i = 1; i < correlationNumbersTimeClaimsReceipt.length; i++)
+        for(let i = 1; i < correlationNumber; i++)
         {
             dataCorrelationTimeClaimsReceipt.push({
-                x: numbersTimeClaimsReceipt[i],
-                y: numbersTimeClaimsReceipt[i - 1],
+                x: correlationNumbersTimeClaimsReceipt[i],
+                y: correlationNumbersTimeClaimsReceipt[i - 1],
             });
 
             dataCorrelationTimeClaimsProcessing.push({
-                x: numbersTimeClaimsProcessing[i],
-                y: numbersTimeClaimsProcessing[i - 1],
+                x: correlationNumbersTimeClaimsProcessing[i],
+                y: correlationNumbersTimeClaimsProcessing[i - 1],
+            });
+        }
+
+        for(let i = 0; i < 10; i++)
+        {
+            dataHistogramTimeClaimsReceipt.push({
+                x: i,
+                y: histogramTimeClaimsNumbers[i],
+            });
+
+            dataHistogramTimeClaimsProcessing.push({
+                x: i,
+                y: histogramTimeClaimsProcessingNumbers[i],
             });
         }
 
@@ -138,6 +157,7 @@ export default class MainComponent extends React.Component
                             <p>Доверительный интервал:</p>
                             <p>[{trustIntervalTimeClaimsReceipt[0]}; {trustIntervalTimeClaimsReceipt[1]}]</p>
                             <p>Критерий статистики: {criteriaStatistics(numbersTimeClaimsReceipt)}</p>
+                            <p>t = {t}</p>
                             <p>{criteriaStatistics(numbersTimeClaimsReceipt) >= t ? "Гипотеза принимается" : "Гипотеза не принимается"}</p>
                         </div>
                         <div style={style.comparisonItem}>
@@ -167,7 +187,7 @@ export default class MainComponent extends React.Component
                             <BarChart
                                 width={500}
                                 height={300}
-                                data={dataCorrelationTimeClaimsReceipt}
+                                data={dataHistogramTimeClaimsReceipt}
                                 margin={{
                                     top: 5, right: 30, left: 20, bottom: 5,
                                 }}
@@ -186,6 +206,7 @@ export default class MainComponent extends React.Component
                             <p>Доверительный интервал:</p>
                             <p>[{trustIntervalTimeClaimsProcessing[0]}; {trustIntervalTimeClaimsProcessing[1]}]</p>
                             <p>Критерий статистики: {criteriaStatistics(numbersTimeClaimsProcessing)}</p>
+                            <p>t = {t}</p>
                             <p>{criteriaStatistics(numbersTimeClaimsProcessing) >= t ? "Гипотеза принимается" : "Гипотеза не принимается"}</p>
 
                         </div>
@@ -216,7 +237,7 @@ export default class MainComponent extends React.Component
                             <BarChart
                                 width={500}
                                 height={300}
-                                data={dataCorrelationTimeClaimsProcessing}
+                                data={dataHistogramTimeClaimsProcessing}
                                 margin={{
                                     top: 5, right: 30, left: 20, bottom: 5,
                                 }}
