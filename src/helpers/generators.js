@@ -27,7 +27,7 @@ export const dispersion = (X) =>
         sum += (X[i] - u) ** 2;
     }
 
-    return sum / (X.length - 1);
+    return sum / X.length;
 };
 
 export const correlation = (X, Y) => {
@@ -45,7 +45,7 @@ export const correlation = (X, Y) => {
             sum += ((X[i] - u) * (X[i+j] - u));
         }
 
-        k[j] = sum / (X.length - 1 - j);
+        k[j] = sum / (X.length - j);
         p[j] = k[j] / disp;
     }
 
@@ -96,12 +96,12 @@ export const criteriaStatistics = (X) =>
 
 export const histogramCheck = (X) =>
 {
-    console.log(X);
     const k = Math.ceil(1.72 * X.length ** (1/3));
     const dx = Math.ceil(X.length / k);
-    const trustInt = trustInterval(X);
     let d_numbers = [];
     let intervals = [];
+    let h = [];
+    let l = [];
 
     for(let i = 1; i <= k; i++)
     {
@@ -133,7 +133,9 @@ export const histogramCheck = (X) =>
         }
     }
 
-    let freq = Array(d_numbers.length).fill(0);
+    console.log('intervals', intervals);
+
+    let ni = Array(d_numbers.length).fill(0);
 
     for(let i = 0; i < d_numbers.length; i++)
     {
@@ -141,12 +143,26 @@ export const histogramCheck = (X) =>
         {
             if (d_numbers[i] === X[j])
             {
-                freq[j]++;
+                ni[j]++;
             }
         }
     }
 
-    console.log('freq', freq);
+    for(let i = 0; i < ni.length; i++)
+    {
+        h[i] = ni[i] / X.length;
+    }
 
-    return freq;
+    // let sum = 0;
+    //
+    // for(let i = 0; i < k; i++)
+    // {
+    //     l[i] = h[i] / (intervals[i][1] - intervals[i][0]);
+    //     sum += l[i] * h[i];
+    // }
+    //
+    // console.log('L', l);
+    // console.log('sum', sum);
+
+    return h;
 };

@@ -76,6 +76,8 @@ export default class MainComponent extends React.Component
         let dataCorrelationTimeClaimsProcessing = [];
         let dataHistogramTimeClaimsReceipt = [];
         let dataHistogramTimeClaimsProcessing = [];
+        let dataOneTimeClaimsReceipt = [];
+        let dataOneTimeClaimsProcessing = [];
         let arr = new Array(20);
 
         let numbersTimeClaimsReceipt = generateRandomNumbers(this.props.N, this.props.AV_TIME_CLAIMS_RECEIPT);
@@ -112,6 +114,15 @@ export default class MainComponent extends React.Component
             dataCorrelationTimeClaimsProcessing.push({
                 x: correlationNumbersTimeClaimsProcessing[i],
                 y: correlationNumbersTimeClaimsProcessing[i - 1],
+            });
+
+            dataOneTimeClaimsReceipt.push({
+               x: i - 1,
+               y: correlationNumbersTimeClaimsReceipt[i - 1],
+            });
+            dataOneTimeClaimsProcessing.push({
+               x: i - 1,
+               y: correlationNumbersTimeClaimsProcessing[i - 1],
             });
         }
 
@@ -176,6 +187,21 @@ export default class MainComponent extends React.Component
                             </ScatterChart>
                         </div>
                         <div style={style.comparisonItem}>
+                            <ScatterChart
+                                width={500}
+                                height={500}
+                                margin={{
+                                    top: 20, right: 20, bottom: 20, left: 20,
+                                }}
+                            >
+                                <CartesianGrid />
+                                <XAxis type="number" dataKey="x" name="stature" />
+                                <YAxis type="number" dataKey="y" name="weight" />
+                                <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                                <Scatter name="A school" data={dataOneTimeClaimsReceipt} fill="#8884d8" />
+                            </ScatterChart>
+                        </div>
+                        <div style={style.comparisonItem}>
                             <LineChart width={500} height={300} data={dataCorrelationTimeClaimsReceipt}>
                                 <XAxis dataKey="x"/>
                                 <YAxis/>
@@ -223,6 +249,21 @@ export default class MainComponent extends React.Component
                                 <YAxis type="number" dataKey="y" name="weight" />
                                 <Tooltip cursor={{ strokeDasharray: '3 3' }} />
                                 <Scatter name="A school" data={dataTimeClaimsProcessing} fill="#880fff" />
+                            </ScatterChart>
+                        </div>
+                        <div style={style.comparisonItem}>
+                            <ScatterChart
+                                width={500}
+                                height={500}
+                                margin={{
+                                    top: 20, right: 20, bottom: 20, left: 20,
+                                }}
+                            >
+                                <CartesianGrid />
+                                <XAxis type="number" dataKey="x" name="stature" />
+                                <YAxis type="number" dataKey="y" name="weight" />
+                                <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                                <Scatter name="A school" data={dataOneTimeClaimsProcessing} fill="#880fff" />
                             </ScatterChart>
                         </div>
                         <div style={style.comparisonItem}>
