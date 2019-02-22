@@ -14,7 +14,7 @@ import {
     dispersion,
     generateRandomNumbers,
     trustInterval,
-    t, histogramCheck
+    t, histogramCheck, chiSquare, generatePriorityNumbers, histogramPriority
 } from "../helpers/generators";
 import ScatterChart from "recharts/es6/chart/ScatterChart";
 import Scatter from "recharts/es6/cartesian/Scatter";
@@ -80,16 +80,28 @@ export default class MainComponent extends React.Component
         let dataOneTimeClaimsProcessing = [];
         let arr = new Array(20);
 
+        let priorityNumbers = generatePriorityNumbers(this.props.N);
+        let priorityNumbersFrequency = histogramPriority(priorityNumbers);
+        let dataPriorityNumbersFrequency = [];
+
         let numbersTimeClaimsReceipt = generateRandomNumbers(this.props.N, this.props.AV_TIME_CLAIMS_RECEIPT);
         let numbersTimeClaimsProcessing = generateRandomNumbers(this.props.N, this.props.AV_TIME_CLAIMS_PROCESSING);
         let histogramTimeClaimsNumbers = histogramCheck(numbersTimeClaimsReceipt);
         let histogramTimeClaimsProcessingNumbers = histogramCheck(numbersTimeClaimsProcessing);
 
-        let correlationNumbersTimeClaimsReceipt = correlation(numbersTimeClaimsReceipt, arr);
-        let correlationNumbersTimeClaimsProcessing = correlation(numbersTimeClaimsProcessing, arr);
+        let correlationNumbersTimeClaimsReceipt = correlation(numbersTimeClaimsReceipt);
+        let correlationNumbersTimeClaimsProcessing = correlation(numbersTimeClaimsProcessing);
 
         let trustIntervalTimeClaimsReceipt = trustInterval(numbersTimeClaimsReceipt);
         let trustIntervalTimeClaimsProcessing = trustInterval(numbersTimeClaimsProcessing);
+
+        for(let i = 1; i < priorityNumbersFrequency.length; i++)
+        {
+            dataPriorityNumbersFrequency.push({
+                x: i,
+                y: priorityNumbersFrequency[i - 1],
+            });
+        }
 
         for(let i = 1; i < numbersTimeClaimsReceipt.length; i++)
         {
@@ -167,9 +179,10 @@ export default class MainComponent extends React.Component
                             <p>Дисперсия: {dispersion(numbersTimeClaimsReceipt)}</p>
                             <p>Доверительный интервал:</p>
                             <p>[{trustIntervalTimeClaimsReceipt[0]}; {trustIntervalTimeClaimsReceipt[1]}]</p>
-                            <p>Критерий статистики: {criteriaStatistics(numbersTimeClaimsReceipt)}</p>
-                            <p>t = {t}</p>
-                            <p>{criteriaStatistics(numbersTimeClaimsReceipt) >= t ? "Гипотеза принимается" : "Гипотеза не принимается"}</p>
+                            <p>Критерий статистики - Z = {criteriaStatistics(numbersTimeClaimsReceipt)}</p>
+                            <p>t = {t} следовательно, {criteriaStatistics(numbersTimeClaimsReceipt) >= t ? "Z >= t - гипотеза принимается" : "Z < t - гипотеза не принимается"}</p>
+                            <p>Xi = {chiSquare(numbersTimeClaimsReceipt)}</p>
+                            <p>следовательно, {criteriaStatistics(numbersTimeClaimsReceipt) < chiSquare(numbersTimeClaimsReceipt) ? "Z < Xi - гипотиза принимается": "Z >= Xi - гипотеза оттвергается"}</p>
                         </div>
                         <div style={style.comparisonItem}>
                             <ScatterChart
@@ -231,10 +244,10 @@ export default class MainComponent extends React.Component
                             <p>Дисперсия: {dispersion(numbersTimeClaimsProcessing)}</p>
                             <p>Доверительный интервал:</p>
                             <p>[{trustIntervalTimeClaimsProcessing[0]}; {trustIntervalTimeClaimsProcessing[1]}]</p>
-                            <p>Критерий статистики: {criteriaStatistics(numbersTimeClaimsProcessing)}</p>
-                            <p>t = {t}</p>
-                            <p>{criteriaStatistics(numbersTimeClaimsProcessing) >= t ? "Гипотеза принимается" : "Гипотеза не принимается"}</p>
-
+                            <p>Критерий статистики - Z = {criteriaStatistics(numbersTimeClaimsProcessing)}</p>
+                            <p>t = {t} следовательно, {criteriaStatistics(numbersTimeClaimsProcessing) >= t ? "Z >= t - гипотеза принимается" : "Z < t - гипотеза не принимается"}</p>
+                            <p>Xi = {chiSquare(numbersTimeClaimsProcessing)}</p>
+                            <p>следовательно, {criteriaStatistics(numbersTimeClaimsProcessing) < chiSquare(numbersTimeClaimsProcessing) ? "Z < Xi - гипотиза принимается": "Z >= Xi - гипотеза оттвергается"}</p>
                         </div>
                         <div style={style.comparisonItem}>
                             <ScatterChart
@@ -290,6 +303,22 @@ export default class MainComponent extends React.Component
                             </BarChart>
                         </div>
                     </div>
+                </div>
+                <div style={style.comparisonItem}>
+                    <p>Гистограмма частот приоритетов</p>
+                    <BarChart
+                        width={500}
+                        height={300}
+                        data={dataPriorityNumbersFrequency}
+                        margin={{
+                            top: 5, right: 30, left: 20, bottom: 5,
+                        }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="x" />
+                        <YAxis />
+                        <Bar dataKey="y" fill="#880fff" />
+                    </BarChart>
                 </div>
             </div>
         );
