@@ -40,10 +40,10 @@ export const correlation = (X) => {
     let p = [];
     let disp = dispersion(X);
 
-    for(let j = 0; j < X.length; j++)
+    for(let j = 1; j < X.length; j++)
     {
         sum = 0;
-        for(let i = 0; i < X.length - j; i++)
+        for(let i = 1; i < X.length - j; i++)
         {
             sum += ((X[i] - u) * (X[i+j] - u));
         }
@@ -55,14 +55,13 @@ export const correlation = (X) => {
     return p;
 };
 
-export const histogramPriority = (X) =>
+export const histogramPriority = (X, maxPriority) =>
 {
-    const k = 4;
-    let freq =  Array(k+1).fill(0);
+    let freq =  Array(maxPriority + 1).fill(0);
 
     for(let i = 0; i < X.length; i++)
     {
-        for(let j = 0; j <= k; j++)
+        for(let j = 0; j <= maxPriority; j++)
         {
             if(X[i] === j + 1)
             {
@@ -176,52 +175,46 @@ export const chiSquare = (X) => {
 
 export const histogramCheck = (X) =>
 {
-    const k = Math.ceil(1.72 * X.length ** (1/3));
+    const k = Math.ceil(1.72 * Math.cbrt(X.length));
     const dx = Math.ceil(X.length / k);
     let d_numbers = [];
     let intervals = [];
     let h = [];
     let l = [];
 
+    // for(let i = 1; i <= k; i++)
+    // {
+    //     let el = 0;
+    //     let er = 0;
+    //
+    //     for(let j = 1; j <= i; j++)
+    //     {
+    //         er += X[j];
+    //
+    //         if(j !== 1)
+    //         {
+    //             el += X[j - 1]
+    //         }
+    //     }
+    //
+    //     intervals.push([el, er]);
+    // }
+
     for(let i = 1; i <= k; i++)
     {
-        let el = 0;
-        let er = 0;
-
-        for(let j = 1; j <= i; j++)
-        {
-            er += X[j];
-
-            if(j !== 1)
-            {
-                el += X[j - 1]
-            }
-        }
+        let el = i * dx;
+        let er = el + dx;
 
         intervals.push([el, er]);
     }
 
+    let ni = Array(X.length).fill(0);
 
     for(let i = 0; i < X.length; i++)
     {
         for(let j = 0; j < k; j++)
         {
             if(X[i] >= intervals[j][0] && X[i] < intervals[j][1])
-            {
-                d_numbers.push(X[j]);
-            }
-        }
-    }
-
-    console.log('intervals', intervals);
-
-    let ni = Array(d_numbers.length).fill(0);
-
-    for(let i = 0; i < d_numbers.length; i++)
-    {
-        for(let j = 0; j < X.length; j++)
-        {
-            if (d_numbers[i] === X[j])
             {
                 ni[j]++;
             }
@@ -233,16 +226,16 @@ export const histogramCheck = (X) =>
         h[i] = ni[i] / X.length;
     }
 
-    // let sum = 0;
-    //
-    // for(let i = 0; i < k; i++)
-    // {
-    //     l[i] = h[i] / (intervals[i][1] - intervals[i][0]);
-    //     sum += l[i] * h[i];
-    // }
-    //
-    // console.log('L', l);
-    // console.log('sum', sum);
+    let sum = 0;
+
+    for(let i = 0; i < k; i++)
+    {
+        l[i] = h[i] / (intervals[i][1] - intervals[i][0]);
+        sum += l[i];
+    }
+
+    console.log('L', l);
+    console.log('sum', sum);
 
     return h;
 };

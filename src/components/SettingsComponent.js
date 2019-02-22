@@ -7,13 +7,19 @@ export default class SettingsComponent extends React.Component
     render()
     {
         const styles= {
-            textAlign: 'center',
-            width: '1100',
-            verticalAlign: 'center',
+            headers: {
+                textAlign: 'center',
+                width: '1100',
+                verticalAlign: 'center',
+            },
+            readOnly: {
+                backgroundColor: '#dee2e6',
+                userSelect: 'none',
+            },
         };
 
         return (
-            <Table size={"lg"} style={styles} striped={true} responsive={"md"} striped bordered hover>
+            <Table size={"lg"} style={styles.headers} striped={true} responsive={"md"} striped bordered hover>
                 <thead>
                 <tr>
                     <td><label>Максимальный приоритет:</label></td>
@@ -26,7 +32,7 @@ export default class SettingsComponent extends React.Component
                 </thead>
                 <tbody>
                 <tr>
-                    <td><input onChange={(event) => this.props.handleChange('MAX_PRIORITY', event)} value={this.props.MAX_PRIORITY} type={"number"}/></td>
+                    <td><input style={styles.readOnly} onChange={(event) => this.props.handleChange('MAX_PRIORITY', event)} value={this.props.MAX_PRIORITY} type={"number"} readOnly/></td>
                     <td><input onChange={(event) => this.props.handleChange('AV_TIME_CLAIMS_RECEIPT', event)} value={this.props.AV_TIME_CLAIMS_RECEIPT} type={"number"}/></td>
                     <td><input onChange={(event) => this.props.handleChange('AV_TIME_CLAIMS_PROCESSING', event)} value={this.props.AV_TIME_CLAIMS_PROCESSING} type={"number"}/></td>
                     <td><input onChange={(event) => this.props.handleChange('DEVICE_AMOUNT', event)} value={this.props.DEVICE_AMOUNT} type={"number"}/></td>

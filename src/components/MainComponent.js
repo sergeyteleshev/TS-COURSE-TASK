@@ -81,7 +81,7 @@ export default class MainComponent extends React.Component
         let arr = new Array(20);
 
         let priorityNumbers = generatePriorityNumbers(this.props.N);
-        let priorityNumbersFrequency = histogramPriority(priorityNumbers);
+        let priorityNumbersFrequency = histogramPriority(priorityNumbers, this.props.MAX_PRIORITY);
         let dataPriorityNumbersFrequency = [];
 
         let numbersTimeClaimsReceipt = generateRandomNumbers(this.props.N, this.props.AV_TIME_CLAIMS_RECEIPT);
@@ -99,7 +99,7 @@ export default class MainComponent extends React.Component
         {
             dataPriorityNumbersFrequency.push({
                 x: i,
-                y: priorityNumbersFrequency[i - 1],
+                y: priorityNumbersFrequency[i - 1] / priorityNumbers.length,
             });
         }
 
@@ -116,7 +116,7 @@ export default class MainComponent extends React.Component
             });
         }
 
-        for(let i = 1; i < correlationNumber; i++)
+        for(let i = 2; i < correlationNumber + 2; i++)
         {
             dataCorrelationTimeClaimsReceipt.push({
                 x: correlationNumbersTimeClaimsReceipt[i],
