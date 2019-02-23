@@ -138,7 +138,7 @@ export default class MainComponent extends React.Component
             });
         }
 
-        for(let i = 0; i < 10; i++)
+        for(let i = 0; i < histogramTimeClaimsNumbers.length; i++)
         {
             dataHistogramTimeClaimsReceipt.push({
                 x: i,

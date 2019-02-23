@@ -176,66 +176,25 @@ export const chiSquare = (X) => {
 export const histogramCheck = (X) =>
 {
     const k = Math.ceil(1.72 * Math.cbrt(X.length));
-    const dx = Math.ceil(X.length / k);
-    let d_numbers = [];
-    let intervals = [];
-    let h = [];
-    let l = [];
 
-    // for(let i = 1; i <= k; i++)
-    // {
-    //     let el = 0;
-    //     let er = 0;
-    //
-    //     for(let j = 1; j <= i; j++)
-    //     {
-    //         er += X[j];
-    //
-    //         if(j !== 1)
-    //         {
-    //             el += X[j - 1]
-    //         }
-    //     }
-    //
-    //     intervals.push([el, er]);
-    // }
+    let length = X.length;
 
-    for(let i = 1; i <= k; i++)
-    {
-        let el = i * dx;
-        let er = el + dx;
+    let min = X[0];
+    let max = X[1];
 
-        intervals.push([el, er]);
+    for (let i = 0; i < length; i++) {
+        let item = X[i];
+        if (item < min) min = item;
+        else if (item > max) max = item;
     }
 
-    let ni = Array(X.length).fill(0);
+    let bins = Math.ceil((max - min + 1) / k);
+    console.log('bins', bins);
 
-    for(let i = 0; i < X.length; i++)
-    {
-        for(let j = 0; j < k; j++)
-        {
-            if(X[i] >= intervals[j][0] && X[i] < intervals[j][1])
-            {
-                ni[j]++;
-            }
-        }
-    }
+    let histogram = new Array(bins).fill(0);
 
-    for(let i = 0; i < ni.length; i++)
-    {
-        h[i] = ni[i] / X.length;
-    }
+    for (let i = 0; i < length; i++)
+        histogram[Math.floor((X[i] - min) / k)]++;
 
-    let sum = 0;
-
-    for(let i = 0; i < k; i++)
-    {
-        l[i] = h[i] / (intervals[i][1] - intervals[i][0]);
-        sum += l[i];
-    }
-
-    console.log('L', l);
-    console.log('sum', sum);
-
-    return h;
+    return histogram;
 };
